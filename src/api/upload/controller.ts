@@ -1,6 +1,7 @@
 import { Request, Response, Router } from "express";
 import mongoose from "mongoose";
 import upload from "../../middlewares/upload";
+import verifyToken from "../../middlewares/verifyToken";
 import { BaseController } from "../common/controller";
 import { Manager } from "../common/manager";
 
@@ -24,7 +25,7 @@ export class UploadController extends BaseController {
   public startRouter(): Router {
     const route = Router();
 
-    route.post('/', upload, this.uploadFiles);
+    route.post('/', verifyToken, this.uploadFiles);
     route.get('/:filename',this.getSingleImage);
     route.delete('/:id', this.deleteImage);
 
