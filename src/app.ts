@@ -1,12 +1,12 @@
 import express, { Application } from "express";
-import {AuthRouter} from "./routes/auth";
+import { AuthController } from "./api/auth/controller";
 
 export class App {
   private app : Application
   private port : string | number
   constructor(){
     this.app = express()
-    this.port = process.env.PORT || 3000
+    this.port = process.env.PORT || 4000
   }
 
   public async startApp(){
@@ -30,7 +30,7 @@ export class App {
 
   private useRouters(){
     const routers = [
-      new AuthRouter(),
+      new AuthController(),
     ];
 
     routers.forEach(_route => this.app.use(`/api/${_route.route_path}`, _route.route));

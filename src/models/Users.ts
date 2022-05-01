@@ -1,8 +1,16 @@
 import mongoose from "mongoose";
 
+export type userSchemaTypes = {
+  firstName: string
+  lastName : string
+  username : string
+  email : string
+  password : string
+  bio : string
+}
 const Schema = mongoose.Schema;
 
-const userSchema = new Schema({
+const userSchema = new Schema<userSchemaTypes>({
   firstName : {
     type: String,
     required: true
@@ -13,11 +21,13 @@ const userSchema = new Schema({
   },
   username : {
     type: String,
-    required: true
+    required: true,
+    unique: true,
   },
   email : {
     type: String,
-    required: true
+    required: true,
+    unique: true
   },
   password : {
     type: String,
