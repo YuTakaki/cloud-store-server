@@ -1,7 +1,8 @@
 import mongoose from "mongoose"
 import user, { userSchemaTypes } from "../../models/Users"
+import { Manager } from "../common/manager"
 
-export class AuthManager{
+export class AuthManager implements Manager{
   private manager : mongoose.Model<userSchemaTypes>
 
   constructor(){

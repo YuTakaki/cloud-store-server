@@ -1,8 +1,9 @@
 import { Request, Response, Router } from "express";
 import { AuthManager } from "./manager";
 import bcrypt from "bcrypt";
+import { BaseController } from "../common/controller";
 
-export class AuthController{
+export class AuthController implements BaseController{
   public route_path = "auth"
   public route : Router
   public manager : AuthManager

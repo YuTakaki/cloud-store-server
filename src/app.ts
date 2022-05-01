@@ -1,5 +1,6 @@
 import express, { Application } from "express";
 import { AuthController } from "./api/auth/controller";
+import { UploadController } from "./api/upload/controller";
 
 export class App {
   private app : Application
@@ -31,6 +32,7 @@ export class App {
   private useRouters(){
     const routers = [
       new AuthController(),
+      new UploadController(),
     ];
 
     routers.forEach(_route => this.app.use(`/api/${_route.route_path}`, _route.route));
