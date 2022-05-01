@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { fileSchema, fileType } from "./Files";
 
 export type userSchemaTypes = {
   firstName: string
@@ -6,7 +7,8 @@ export type userSchemaTypes = {
   username : string
   email : string
   password : string
-  bio : string
+  bio : string,
+  files?: fileType[]
 }
 const Schema = mongoose.Schema;
 
@@ -37,6 +39,7 @@ const userSchema = new Schema<userSchemaTypes>({
     type: String,
     required: true
   },
+  files : [fileSchema]
 }, {timestamps: true})
 
 const user = mongoose.model('user', userSchema);
