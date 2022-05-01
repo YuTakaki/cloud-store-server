@@ -9,7 +9,10 @@ export class AuthManager{
   }
 
   public findUser = async(usernameOrEmail : string) => {
-    return this.manager.findOne({$or: [{username : usernameOrEmail}]})
+    return this.manager.findOne({$or: [
+      {username: usernameOrEmail},
+      {email: usernameOrEmail}
+    ]})
   }
 
   public saveUser = async(data : userSchemaTypes) => {
