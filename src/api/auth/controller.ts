@@ -3,6 +3,7 @@ import { AuthManager } from "./manager";
 import bcrypt from "bcrypt";
 import { BaseController } from "../common/controller";
 import generateToken from "../../utils/generateToken";
+import verifyToken from "../../middlewares/verifyToken";
 
 export class AuthController implements BaseController{
   public route_path = "auth"
@@ -18,6 +19,7 @@ export class AuthController implements BaseController{
     const router = Router();
     router.post("/register", this.register);
     router.post("/login", this.login);
+    router.get('/verify', verifyToken, this.verify)
 
     return router;
   }
@@ -38,7 +40,11 @@ export class AuthController implements BaseController{
       const user = await this.manager.findUser(saved_user.username);
 
       const token = generateToken(saved_user.id);
-      return res.send({
+      return res.cookie("token", token, {
+        httpOnly: true,
+        sameSite: 'none',
+        secure: true,
+      }).send({
         user,
         token,
       })
@@ -46,6 +52,24 @@ export class AuthController implements BaseController{
     } catch (error) {
       console.log(error);
       return res.send(error)
+    }
+  }
+
+  public verify = async(req: Request, res: Response) => {
+    try {
+      const { user_id } = res.locals;
+      const user = await this.manager.findUserbyId(user_id);
+      if (!user) {
+        res.sendStatus(401)
+      } else {
+        res.send(user);
+      }
+
+      
+    } catch (error) {
+      console.log(error);
+      res.sendStatus(401)
+      
     }
   }
 
@@ -60,7 +84,11 @@ export class AuthController implements BaseController{
         const verifyPassword = await bcrypt.compare(password, user.password);
         if (verifyPassword) {
           const token = generateToken(user.id);
-          return res.send({
+          return res.cookie("token", token, {
+            httpOnly: true,
+            sameSite: 'none',
+            secure: true,
+          }).send({
             user,
             token
           })

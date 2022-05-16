@@ -16,6 +16,10 @@ export class AuthManager implements Manager{
     ]}, {files : 0, password: 0})
   }
 
+  public findUserbyId = async(id : string) => {
+    return this.user.findById(id)
+  }
+
   public saveUser = async(data : userSchemaTypes) => {
     return (await this.user.create(data)).save()
   }

@@ -1,6 +1,10 @@
 import express, { Application } from "express";
 import { AuthController } from "./api/auth/controller";
 import { UploadController } from "./api/upload/controller";
+import cors from 'cors';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 export class App {
   private app : Application
@@ -23,7 +27,11 @@ export class App {
   private useMiddleware(){
     const middlewares = [
       express.json(),
-      express.urlencoded({extended: true})
+      express.urlencoded({extended: true}),
+      cors({
+        credentials: true,
+        origin: process.env.ORIGIN
+      })
     ]
 
     middlewares.forEach((_middleware) => this.app.use(_middleware))
