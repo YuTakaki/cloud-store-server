@@ -3,6 +3,7 @@ import { AuthController } from "./api/auth/controller";
 import { UploadController } from "./api/upload/controller";
 import cors from 'cors';
 import dotenv from 'dotenv';
+import cookieParser from 'cookie-parser'
 
 dotenv.config();
 
@@ -31,7 +32,8 @@ export class App {
       cors({
         credentials: true,
         origin: process.env.ORIGIN
-      })
+      }),
+      cookieParser()
     ]
 
     middlewares.forEach((_middleware) => this.app.use(_middleware))

@@ -57,12 +57,12 @@ export class AuthController implements BaseController{
 
   public verify = async(req: Request, res: Response) => {
     try {
-      const { user_id } = res.locals;
-      const user = await this.manager.findUserbyId(user_id);
-      if (!user) {
+      const { user } = res.locals;
+      const _user = await this.manager.findUserbyId(user);
+      if (!_user) {
         res.sendStatus(401)
       } else {
-        res.send(user);
+        res.send(_user);
       }
 
       
@@ -80,6 +80,7 @@ export class AuthController implements BaseController{
         password
       } = req.body;
       const user = await this.manager.findUser(usernameOrEmail);
+      console.log(user);
       if (user != null) {
         const verifyPassword = await bcrypt.compare(password, user.password);
         if (verifyPassword) {
