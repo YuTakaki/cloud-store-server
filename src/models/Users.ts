@@ -35,10 +35,6 @@ const userSchema = new Schema<userSchemaTypes>({
     type: String,
     required: true
   },
-  bio : {
-    type: String,
-    required: true
-  },
   files : [fileSchema]
 }, {timestamps: true})
 
