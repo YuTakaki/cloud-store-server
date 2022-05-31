@@ -12,6 +12,8 @@ export default async (req : Request, res: Response, next: NextFunction) => {
       res.locals.user = verify.user_id;
       console.log(res.locals.user)
       next();
+    } else {
+      return res.status(401).send({error : "no token available"})
     }
     
   } catch (error) {
