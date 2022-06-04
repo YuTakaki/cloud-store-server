@@ -2,7 +2,7 @@ import { Request, Response, Router } from "express";
 import mongoose from "mongoose";
 import upload from "../../middlewares/upload";
 import verifyToken from "../../middlewares/verifyToken";
-import { fileType } from "../../models/Files";
+import file, { fileType } from "../../models/Files";
 import { BaseController } from "../common/controller";
 import { Manager } from "../common/manager";
 import { UploadManager } from "./manager";
@@ -28,10 +28,27 @@ export class UploadController implements BaseController {
     const route = Router();
 
     route.post('/', verifyToken, upload, this.uploadFiles);
-    route.get('/:filename',verifyToken,this.getSingleImage);
-    route.delete('/:id',verifyToken, this.deleteImage);
+    route.get('/type/:type',verifyToken,this.getFiles);
+    route.get('/:filename',verifyToken,this.getSingleFile);
+    route.delete('/:id',verifyToken, this.deleteFile);
 
     return route;
+  }
+
+  public getFiles = async (req: Request, res: Response) => {
+    try {
+      const {
+        user
+      } = res.locals
+      const {
+        type
+      } = req.params;
+      const files = await this.manager.getFilesByType(type, user);
+      return res.send(files.map(file => file.files));
+      
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   public uploadFiles = async(req: Request, res: Response) => {
@@ -48,7 +65,7 @@ export class UploadController implements BaseController {
     }
   }
 
-  public getSingleImage = async (req: Request, res: Response) => {
+  public getSingleFile = async (req: Request, res: Response) => {
     try {
       await this.gfs.openDownloadStreamByName(req.params.filename).pipe(res);
     } catch (err) {
@@ -56,7 +73,7 @@ export class UploadController implements BaseController {
     }
   };
   
-  public deleteImage = async (req: Request, res: Response) => {
+  public deleteFile = async (req: Request, res: Response) => {
     try {
       await this.gfs.delete(new mongoose.Types.ObjectId(req.params.id));
       res.status(200).send("File has been deleted.");
