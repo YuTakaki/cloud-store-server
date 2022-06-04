@@ -118,11 +118,11 @@ export class AuthController implements BaseController{
           })
         }
         return res.status(401).send({
-          error : "wrong password"
+          password : "wrong password"
         });
       }
       return res.status(404).send({
-        error : "user does not exist"
+        usernameOrEmail : "user does not exist"
       })
     } catch (error) {
       console.log(error);
