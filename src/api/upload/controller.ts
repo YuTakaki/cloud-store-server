@@ -16,11 +16,8 @@ export class UploadController implements BaseController {
   constructor(){
     this.route = this.startRouter();
     this.manager = new UploadManager();
-    const conn = mongoose.connection;
-    conn.once("open", () => {
-      this.gfs = new mongoose.mongo.GridFSBucket(conn.db, {
-        bucketName: "files",
-      });
+    this.gfs = new mongoose.mongo.GridFSBucket(mongoose.connection.db, {
+      bucketName: "files",
     });
   }
 
@@ -69,6 +66,7 @@ export class UploadController implements BaseController {
     try {
       await this.gfs.openDownloadStreamByName(req.params.filename).pipe(res);
     } catch (err) {
+      console.log(err)
       res.status(500).send(err);
     }
   };

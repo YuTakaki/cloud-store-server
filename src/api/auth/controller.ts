@@ -103,7 +103,6 @@ export class AuthController implements BaseController{
         password
       } = req.body;
       const user = await this.manager.findUser(usernameOrEmail);
-      console.log(user);
       if (user != null) {
         const verifyPassword = await bcrypt.compare(password, user.password);
         if (verifyPassword) {
